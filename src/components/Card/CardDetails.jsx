@@ -1,26 +1,44 @@
 // src/components/Card/CardDetails.jsx
-import { useState, useEffect } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
-import useAuth from "../../Context/AuthProvider";
+import { AuthContext } from "../../Context/AuthProvider";
 
 const CardDetails = () => {
-  const crop = useLoaderData().data;
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const loadedData = useLoaderData();
+  const crop = loadedData?.data || loadedData?.result || loadedData || {};
+
+  const { user, loading: authLoading } = useContext(AuthContext);
 
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
   const [alreadySent, setAlreadySent] = useState(false);
   const [interests, setInterests] = useState(crop.interests || []);
 
-  const totalPrice = quantity * crop.pricePerUnit;
+  const totalPrice = quantity * (crop.pricePerUnit || 0);
   const isOwner = user?.email === crop.owner?.ownerEmail;
 
-  // Check if user already sent interest
+  if (!crop || !crop._id) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen text-center">
+        <span className="loading loading-spinner loading-lg text-error mb-6"></span>
+        <p className="text-3xl font-bold text-red-600">Crop Not Found!</p>
+        <p className="text-gray-600 mt-2">The crop you are looking for does not exist.</p>
+      </div>
+    );
+  }
+
+  if (authLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg text-success"></span>
+      </div>
+    );
+  }
+
   useEffect(() => {
     if (user && interests.length > 0) {
-      const sent = interests.find(i => i.userEmail === user.email);
+      const sent = interests.find((i) => i.userEmail === user.email);
       setAlreadySent(!!sent);
     }
   }, [user, interests]);
@@ -38,7 +56,7 @@ const CardDetails = () => {
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, Send!",
-      cancelButtonText: "Cancel"
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         const interestData = {
@@ -47,24 +65,32 @@ const CardDetails = () => {
           userName: user.displayName || "Anonymous",
           quantity: Number(quantity),
           message,
-          status: "pending"
+          status: "pending",
         };
 
-        fetch("http://localhost:3000/interest", {
+        fetch("http://localhost:3000/card", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(interestData)
+          body: JSON.stringify(interestData),
         })
-          .then(res => res.json())
-          .then(data => {
+          .then((res) => res.json())
+          .then((data) => {
             if (data.success) {
               Swal.fire("Success!", "Interest sent successfully!", "success");
               setAlreadySent(true);
-              // Update interests list
+              // Refresh interests
               fetch(`http://localhost:3000/card/${crop._id}`)
-                .then(res => res.json())
-                .then(updated => setInterests(updated.data.interests));
+                .then((res) => res.json())
+                .then((updated) => {
+                  const newCrop = updated?.data || updated?.result || updated || {};
+                  setInterests(newCrop.interests || []);
+                });
+            } else {
+              Swal.fire("Failed", data.message || "Something went wrong", "error");
             }
+          })
+          .catch(() => {
+            Swal.fire("Error", "Failed to send interest", "error");
           });
       }
     });
@@ -77,22 +103,25 @@ const CardDetails = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: status === "accepted" ? "#22c55e" : "#ef4444",
-      confirmButtonText: `Yes, ${status}!`
+      confirmButtonText: `Yes, ${status}!`,
     }).then((result) => {
       if (result.isConfirmed) {
         fetch("http://localhost:3000/interest/status", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ interestId, cropId: crop._id, status })
+          body: JSON.stringify({ interestId, cropId: crop._id, status }),
         })
-          .then(res => res.json())
-          .then(data => {
+          .then((res) => res.json())
+          .then((data) => {
             if (data.success) {
               Swal.fire("Updated!", `Interest ${status}!`, "success");
               // Refresh interests
               fetch(`http://localhost:3000/card/${crop._id}`)
-                .then(res => res.json())
-                .then(updated => setInterests(updated.data.interests));
+                .then((res) => res.json())
+                .then((updated) => {
+                  const newCrop = updated?.data || updated?.result || updated || {};
+                  setInterests(newCrop.interests || []);
+                });
             }
           });
       }
@@ -119,15 +148,15 @@ const CardDetails = () => {
 
           <div className="p-8 space-y-6">
             <div className="flex items-center gap-3">
-              <span className="text-5xl font-bold text-green-600">৳{crop.pricePerUnit}</span>
-              <span className="text-xl text-gray-600">/ {crop.unit}</span>
+              <span className="text-5xl font-bold text-green-600">৳{crop.pricePerUnit || 0}</span>
+              <span className="text-xl text-gray-600">/ {crop.unit || "unit"}</span>
             </div>
 
             <div className="space-y-4 text-lg">
-              <p><strong>Type:</strong> <span className="badge badge-success badge-lg">{crop.type}</span></p>
-              <p><strong>Location:</strong> {crop.location}</p>
-              <p><strong>Available:</strong> <span className="font-bold text-green-700">{crop.quantity} {crop.unit}</span></p>
-              <p><strong>Description:</strong> {crop.description}</p>
+              <p><strong>Type:</strong> <span className="badge badge-success badge-lg">{crop.type || "N/A"}</span></p>
+              <p><strong>Location:</strong> {crop.location || "Not specified"}</p>
+              <p><strong>Available:</strong> <span className="font-bold text-green-700">{crop.quantity || 0} {crop.unit || ""}</span></p>
+              <p><strong>Description:</strong> {crop.description || "No description"}</p>
               <p><strong>Posted by:</strong> {crop.owner?.ownerName || "Farmer"}</p>
             </div>
           </div>
@@ -139,7 +168,7 @@ const CardDetails = () => {
             <h2 className="text-3xl font-bold text-center mb-8 text-green-700">Show Your Interest</h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <label className="label"><span className="label-text text-lg">Quantity ({crop.unit})</span></label>
+                <label className="label"><span className="label-text text-lg">Quantity ({crop.unit || "unit"})</span></label>
                 <input
                   type="number"
                   min="1"
@@ -208,14 +237,19 @@ const CardDetails = () => {
                   <tbody>
                     {interests.map((interest) => (
                       <tr key={interest._id}>
-                        <td className="font-semibold">{interest.userName}</td>
+                        <td className="font-semibold">{interest.userName || interest.userEmail}</td>
                         <td>{interest.quantity} {crop.unit}</td>
                         <td>{interest.message || "-"}</td>
                         <td>
-                          <span className={`badge ${
-                            interest.status === "pending" ? "badge-warning" :
-                            interest.status === "accepted" ? "badge-success" : "badge-error"
-                          }`}>
+                          <span
+                            className={`badge ${
+                              interest.status === "pending"
+                                ? "badge-warning"
+                                : interest.status === "accepted"
+                                ? "badge-success"
+                                : "badge-error"
+                            }`}
+                          >
                             {interest.status}
                           </span>
                         </td>
