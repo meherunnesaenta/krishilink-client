@@ -1,5 +1,5 @@
 import React, { use } from 'react';
-import { Navigate, useLocation } from 'react-router';
+import { Navigate, useLocation,  } from 'react-router-dom';
 import { AuthContext } from './AuthProvider';
 import Loading from '../Components/Loading/Loading';
 

@@ -1,15 +1,19 @@
 // src/pages/Home.jsx
 import {useEffect} from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import Banner1 from '../assets/banner1.jpg'
 import Banner2 from '../assets/banner2.jpg'
 import Banner3 from '../assets/banner3.jpg'
+import '../index.css';
 
 import "swiper/css";
 import "swiper/css/pagination";
 import Card from "../components/Card/Card";
+
+const cardPromise = fetch('http://localhost:3000/latest-products').then(res=>res.json());
+
 
 const Home = () => {
   return (
@@ -73,17 +77,17 @@ const Home = () => {
       <section className="py-16 bg-lightbg">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-primary mb-4">Latest crops</h2>
+            <h2 className="text-4xl font-bold text-green-800 mb-4">Latest crops</h2>
             <p className="text-lg text-gray-600">What are farmers selling right now?</p>
           </div>
 
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <Card ></Card>
+          <div>
+              <Card cardPromise={cardPromise}></Card>
           </div>
 
           <div className="text-center mt-10">
-            <Link to="/all-crops" className="btn btn-outline btn-primary btn-lg">
+            <Link to="/all-crops" className="btn btn-outline bg-green-100 hover:bg-green-800 hover:text-white btn-lg">
              See all crops →
             </Link>
           </div>
@@ -93,21 +97,23 @@ const Home = () => {
       {/* How It Works */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center text-primary mb-16">কীভাবে কাজ করে কৃষিলিংক?</h2>
+          <h2 className="text-4xl font-bold text-center text-green-800 mb-16">কীভাবে কাজ করে কৃষিলিংক?</h2>
           <div className="grid md:grid-cols-3 gap-10">
             <div className="text-center">
-              <img src="https://i.ibb.co.com/8XvPqYJ/how1.png" alt="" className="mx-auto mb-6 h-32" />
-              <h3 className="text-2xl font-bold text-primary">১. ফসল যোগ করুন</h3>
+              <img src=  "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=1089&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+ alt="" className="mx-auto mb-6 h-32" />
+              <h3 className="text-2xl font-bold text-green-800">১. ফসল যোগ করুন</h3>
               <p className="mt-4 text-gray-600">আপনার ফসলের ছবি, দাম, পরিমাণ দিয়ে পোস্ট করুন</p>
             </div>
             <div className="text-center">
-              <img src="https://i.ibb.co.com/7tQ2mZk/how2.png" alt="" className="mx-auto mb-6 h-32" />
-              <h3 className="text-2xl font-bold text-primary">২. আগ্রহ দেখান</h3>
+              <img src= "https://images.unsplash.com/photo-1603833665858-e61d17a86224?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+ alt="" className="mx-auto mb-6 h-32" />
+              <h3 className="text-2xl font-bold text-green-800">২. আগ্রহ দেখান</h3>
               <p className="mt-4 text-gray-600">পছন্দের ফসলে "আগ্রহী" বাটন চাপুন</p>
             </div>
             <div className="text-center">
-              <img src="https://i.ibb.co.com/5Y7h7n8/how3.png" alt="" className="mx-auto mb-6 h-32" />
-              <h3 className="text-2xl font-bold text-primary">৩. সরাসরি যোগাযোগ</h3>
+              <img src= "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8b3JhbmdlfGVufDB8fDB8fHww" alt="" className="mx-auto mb-6 h-32" />
+              <h3 className="text-2xl font-bold text-green-800">৩. সরাসরি যোগাযোগ</h3>
               <p className="mt-4 text-gray-600">কৃষকের সাথে চ্যাট করে দাম ঠিক করুন</p>
             </div>
           </div>
@@ -117,7 +123,7 @@ const Home = () => {
       {/* Extra 2 Sections (তোর এসাইনমেন্টে লাগবে) */}
       <section className="py-20 bg-lightbg">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-primary mb-8">কেন কৃষিলিংক বেছে নেবেন?</h2>
+          <h2 className="text-4xl font-bold text-green-800 mb-8">কেন কৃষিলিংক বেছে নেবেন?</h2>
           <div className="grid md:grid-cols-4 gap-8 mt-12">
             <div className="bg-white p-8 rounded-2xl shadow-lg">
               <h3 className="text-5xl font-bold text-accent">১০০০+</h3>

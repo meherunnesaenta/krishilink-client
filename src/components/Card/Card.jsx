@@ -1,21 +1,24 @@
-import React from 'react';
+"use client";
+import React, { use } from 'react';
+import LatestCard from './LatestCard';
 
-const Card = () => {
+const Card = ({ cardPromise, searchTerm = "" }) => {
+
+  const latestCards = use(cardPromise);
+
+  const filtered = latestCards.filter(card =>
+    card.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    card.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    card.type?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="card bg-white shadow-xl hover:shadow-2xl transition">
-                <figure className="px-6 pt-6">
-                  <div className="skeleton h-48 w-full rounded-xl"></div>
-                </figure>
-                <div className="card-body">
-                  <h3 className="card-title">Tomato – Bogra</h3>
-                  <p>৳55 / kg | 400 kg</p>
-                  <div className="card-actions justify-end">
-                    <button className="btn btn-primary btn-sm">details</button>
-                  </div>
-                </div>
-              </div>
-            ))}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
+      {filtered.map(card => (
+        <LatestCard key={card._id} card={card} />
+      ))}
+    </div>
+
   );
 };
 
