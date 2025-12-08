@@ -8,9 +8,7 @@ const LatestCard = ({ card }) => {
       {/* IMAGE */}
       <div className="relative h-56 w-full overflow-hidden">
         <img
-          src={
-            card.image || <p>Image is not found</p>
-          }
+          src={card.image || "https://via.placeholder.com/400x300?text=No+Image"}
           alt={card.name}
           className="h-full w-full object-cover group-hover:scale-110 transition-all duration-500"
         />
@@ -49,7 +47,7 @@ const LatestCard = ({ card }) => {
         </p>
 
         {/* Button */}
-        <Link to={`/crop/${card._id}`}>
+        <Link to={`/card/${card._id}`}>
           <button className="mt-3 w-full py-2 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition">
             View Details
           </button>

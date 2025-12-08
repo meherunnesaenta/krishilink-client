@@ -7,6 +7,7 @@ import Profile from "../pages/Profile";
 import Login from "../components/Login/Login";
 import PrivateRoute from "../Context/PrivateRoute";
 import Register from "../components/Register/Register";
+import CardDetails from "../components/Card/CardDetails";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,11 @@ export const router = createBrowserRouter([
         path: '/register',
         Component: Register
       },
+      {
+        path:'/card/:id',
+        loader:({params})=>fetch(`http://localhost:3000/card/${params.id}`),
+        element:<CardDetails></CardDetails>
+      }
     ],
   },
   {
