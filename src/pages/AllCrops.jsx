@@ -19,16 +19,30 @@ const AllCrops = () => {
   }, []);
 
   // Search filter
-  useEffect(() => {
-    const filtered = crops.filter(
-      (crop) =>
-        crop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        crop.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        crop.type.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredCrops(filtered);
-  }, [searchTerm, crops]);
+useEffect(() => {
+  const term = searchTerm.toLowerCase().trim();
 
+  if (!term) {
+    setFilteredCrops(crops);
+    return;
+  }
+
+  const filtered = crops.filter((crop) => {
+    const searchable = [
+      crop.name,
+      crop.location,
+      crop.type,
+      crop.description, 
+    ]
+      .filter(Boolean)
+      .map(field => field.toString().toLowerCase())
+      .join(" ");
+
+    return searchable.includes(term);
+  });
+
+  setFilteredCrops(filtered);
+}, [searchTerm, crops]);
   // If crops empty but still loading
   if (!crops.length) {
     return (

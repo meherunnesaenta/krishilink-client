@@ -3,7 +3,8 @@ import { useState, useEffect, useContext } from "react";
 import { useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../Context/AuthProvider";
-
+import { motion } from "framer-motion";
+import { Leaf, MapPin, Package, User, Sparkles, Wheat } from "lucide-react";
 const CardDetails = () => {
   const loadedData = useLoaderData();
   const crop = loadedData?.data || loadedData?.result || loadedData || {};
@@ -133,34 +134,152 @@ const CardDetails = () => {
       <div className="max-w-6xl mx-auto">
 
         {/* Hero Section */}
-        <div className="grid md:grid-cols-2 gap-10 bg-white rounded-3xl shadow-2xl overflow-hidden">
-          <div className="relative">
-            <img
-              src={crop.image || "/no-image.jpg"}
-              alt={crop.name}
-              className="w-full h-96 object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-            <h1 className="absolute bottom-6 left-6 text-4xl md:text-5xl font-bold text-white drop-shadow-2xl">
-              {crop.name}
-            </h1>
-          </div>
-
-          <div className="p-8 space-y-6">
-            <div className="flex items-center gap-3">
-              <span className="text-5xl font-bold text-green-600">৳{crop.pricePerUnit || 0}</span>
-              <span className="text-xl text-gray-600">/ {crop.unit || "unit"}</span>
+        <motion.div
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="group relative max-w-6xl mx-auto"
+        >
+          {/* Main Card */}
+          <div className="grid md:grid-cols-2 gap-0 bg-white rounded-3xl shadow-2xl overflow-hidden relative">
+            {/* Floating Background Elements */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute top-10 left-10 w-72 h-72 bg-green-400 rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-400 rounded-full blur-3xl animate-pulse delay-1000"></div>
             </div>
 
-            <div className="space-y-4 text-lg">
-              <p><strong>Type:</strong> <span className="badge badge-success badge-lg">{crop.type || "N/A"}</span></p>
-              <p><strong>Location:</strong> {crop.location || "Not specified"}</p>
-              <p><strong>Available:</strong> <span className="font-bold text-green-700">{crop.quantity || 0} {crop.unit || ""}</span></p>
-              <p><strong>Description:</strong> {crop.description || "No description"}</p>
-              <p><strong>Posted by:</strong> {crop.owner?.ownerName || "Farmer"}</p>
+            {/* Image Section */}
+            <div className="relative overflow-hidden">
+              <motion.img
+                src={crop.image || "/no-image.jpg"}
+                alt={crop.name}
+                className="w-full h-96 md:h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                initial={{ scale: 1.2 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2 }}
+              />
+
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+
+              {/* Sparkles Effect */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute top-6 right-6"
+              >
+                <Sparkles className="w-12 h-12 text-yellow-400 opacity-60" />
+              </motion.div>
+
+              {/* Crop Name with Glow */}
+              <motion.h1
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="absolute bottom-8 left-8 text-5xl md:text-6xl font-extrabold text-white 
+                       drop-shadow-2xl tracking-tight
+                       bg-clip-text bg-gradient-to-r from-green-400 to-emerald-300 
+                       text-transparent animate-pulse"
+                style={{
+                  textShadow: "0 0 30px rgba(34,197,94,0.7)"
+                }}
+              >
+                {crop.name}
+              </motion.h1>
+
+              {/* Leaf Icon Decoration */}
+              <motion.div
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
+                className="absolute top-8 left-8"
+              >
+                <Leaf className="w-16 h-16 text-green-400 opacity-80" />
+              </motion.div>
+            </div>
+
+            {/* Details Section */}
+            <div className="p-8 md:p-12 lg:p-16 space-y-8 relative z-10 bg-gradient-to-br from-gray-50 to-green-50">
+              {/* Price Badge - Animated */}
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+                className="inline-block"
+              >
+                <div className="flex items-baseline gap-4 p-6 bg-gradient-to-r from-green-600 to-emerald-600 
+                          rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300
+                          border-4 border-white/20">
+                  <span className="text-6xl font-black text-white tracking-tighter">
+                    ৳{crop.pricePerUnit || 0}
+                  </span>
+                  <span className="text-2xl font-bold text-green-100">
+                    / {crop.unit || "unit"}
+                  </span>
+                </div>
+              </motion.div>
+
+              {/* Info Grid */}
+              <div className="space-y-6 text-lg">
+                {[
+                  { icon: Leaf, label: "Type", value: crop.type || "N/A", color: "text-green-600" },
+                  { icon: MapPin, label: "Location", value: crop.location || "Not specified", color: "text-blue-600" },
+                  { icon: Package, label: "Available", value: `${crop.quantity || 0} ${crop.unit || ""}`, color: "text-emerald-600", highlight: true },
+                  { icon: User, label: "Posted by", value: crop.owner?.ownerName || "Farmer", color: "text-purple-600" },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ x: -50, opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.7 + index * 0.1 }}
+                    className="flex items-center gap-5 p-4 rounded-2xl bg-white/70 backdrop-blur-sm 
+                           shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1
+                           border border-green-100"
+                  >
+                    <div className={`p-3 rounded-full bg-gradient-to-br from-green-100 to-emerald-100`}>
+                      <item.icon className={`w-7 h-7 ${item.color}`} />
+                    </div>
+                    <div className="flex-1">
+                      <span className="font-semibold text-gray-700">{item.label}:</span>
+                      <span className={`ml-3 font-bold ${item.highlight ? "text-2xl text-green-700" : "text-gray-900"}`}>
+                        {item.value}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Description */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 1 }}
+                className="pt-6 border-t-2 border-dashed border-green-200"
+              >
+                <p className="text-gray-700 leading-relaxed text-lg italic">
+                  "{crop.description || "No description available"}"
+                </p>
+              </motion.div>
+
+              {/* Fresh Badge */}
+              <div
+                className="absolute -top-4 -right-4"
+              >
+                <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-8 py-3 
+                          rounded-full text-lg font-bold shadow-2xl rotate-12">
+                  FRESH!
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Interest Form - Only for non-owners */}
         {!isOwner && user && !alreadySent && (
@@ -242,13 +361,12 @@ const CardDetails = () => {
                         <td>{interest.message || "-"}</td>
                         <td>
                           <span
-                            className={`badge ${
-                              interest.status === "pending"
+                            className={`badge ${interest.status === "pending"
                                 ? "badge-warning"
                                 : interest.status === "accepted"
-                                ? "badge-success"
-                                : "badge-error"
-                            }`}
+                                  ? "badge-success"
+                                  : "badge-error"
+                              }`}
                           >
                             {interest.status}
                           </span>

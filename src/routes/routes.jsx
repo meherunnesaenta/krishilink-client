@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
       {
         path:'/card/:id',
         loader:({params})=>fetch(`http://localhost:3000/card/${params.id}`),
-        element:<CardDetails></CardDetails>
+        element:<PrivateRoute><CardDetails></CardDetails></PrivateRoute>
       }
     ],
   },
