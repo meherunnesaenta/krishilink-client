@@ -8,6 +8,9 @@ import Login from "../components/Login/Login";
 import PrivateRoute from "../Context/PrivateRoute";
 import Register from "../components/Register/Register";
 import CardDetails from "../components/Card/CardDetails";
+import MyInterest from "../components/MyInterest/MyInterest";
+import { AddCrops } from "../pages/AddCrops";
+import MyPost from "../pages/MyPost";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +41,18 @@ export const router = createBrowserRouter([
         path:'/card/:id',
         loader:({params})=>fetch(`http://localhost:3000/card/${params.id}`),
         element:<PrivateRoute><CardDetails></CardDetails></PrivateRoute>
+      },
+      {
+        path:'/my-interests',
+        element:<PrivateRoute><MyInterest></MyInterest></PrivateRoute>
+      },
+      {
+        path :'/add-crop',
+        element:<PrivateRoute><AddCrops></AddCrops></PrivateRoute>
+      },
+      {
+        path:'/my-posts',
+        element:<PrivateRoute><MyPost></MyPost></PrivateRoute>
       }
     ],
   },

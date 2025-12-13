@@ -5,14 +5,14 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 const Register = () => {
 
-    const { createUser, user, setUser, setLoading, update } = useContext(AuthContext);
+    const { createUser, googleSignIn, setUser, setLoading, update, } = useContext(AuthContext);
     const [error, setError] = useState('')
     const [nameError, setNameError] = useState('');
     const [passError, setPassError] = useState('');
     const navigate = useNavigate();
     const handleRegister = (e) => {
         e.preventDefault();
-        setError(error);
+        setError('');
         const from = e.target;
         const name = from.name?.value;
         const email = from.email?.value;
@@ -42,7 +42,7 @@ const Register = () => {
         createUser(email, password)
             .then(res => {
                 const currentUser = res.user;
-                update(name, photoUrl)  
+                update(name, photoUrl)
                     .then(() => {
                         setUser(currentUser);
                         setLoading(false);
@@ -54,7 +54,22 @@ const Register = () => {
 
 
 
-   }
+    }
+
+    const handleGoogle = () => {
+        googleSignIn()
+            .then(res => {
+                setLoading(false)
+                setUser(res.user)
+                toast.success("Well done !!!");
+                navigate(`${location.state ? location.state : '/'}`);
+            })
+            .catch(err => {
+
+                setError(err.message);
+            })
+
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-green-50 px-4">
@@ -115,12 +130,15 @@ const Register = () => {
                     <span className="mx-3 text-gray-400">or</span>
                     <hr className="flex-grow border-gray-300" />
                 </div>
+                <button onClick={handleGoogle} className="w-full flex items-center justify-center gap-2 border py-2 rounded-xl hover:bg-green-100 transition-all">
+                    Continue with Google
+                </button>
 
 
                 {/* Login Link */}
                 <p className="text-center text-gray-600 mt-3 text-sm">
                     Already have an account?{" "}
-                    <MyNavLink to='/login'>Register</MyNavLink>
+                    <MyNavLink to='/login'>Login</MyNavLink>
                 </p>
             </div>
         </div>

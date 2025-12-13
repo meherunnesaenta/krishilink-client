@@ -216,7 +216,7 @@ return (
               {interests.map((i,index) => (
                     <tr key={i._id}>
                       <td className="font-bold">{index+1}</td>
-                      <td className="font-bold">{user?.displayName || user?.email}</td>
+                      <td className="font-bold">{i.buyer_name || i.buyer_email}</td>
                       <td>{i.quantity} {crop.unit}</td>
                       <td>{i.message || "-"}</td>
                       <td><span className={`badge badge-lg ${i.status === "accepted" ? "badge-success" : i.status === "rejected" ? "badge-error" : "badge-warning"}`}>{i.status}</span></td>

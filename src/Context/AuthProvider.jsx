@@ -11,7 +11,7 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true);
 
-    const createUser = ( email, password) => {
+    const createUser = (email, password) => {
         return createUserWithEmailAndPassword(auth, email, password);
     }
 
@@ -40,10 +40,19 @@ const AuthProvider = ({ children }) => {
         return updateProfile(auth.currentUser, { displayName, photoURL });
     }
 
-    const sendPassResetEmail = (email) => {
-        setLoading(true);
-        return sendPasswordResetEmail(auth, email);
+    const sendPassResetEmail = async (email) => {
+       if (!email) {
+      throw new Error("give email");
+    }
+    setLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      return Promise.resolve(); 
+    } finally {
+      setLoading(false); 
+    }
     };
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {

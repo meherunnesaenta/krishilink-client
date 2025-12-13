@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const Login = () => {
-    const { singIn, user, setUser, setLoading, googleSignIn,sendPassResetEmail} = useContext(AuthContext);
+    const { singIn, loading, setUser, setLoading, googleSignIn, sendPassResetEmail } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
     const [error, setError] = useState('');
@@ -29,7 +29,7 @@ const Login = () => {
                 navigate(`${location.state ? location.state : '/'}`);
             })
             .catch(err => {
-                
+
                 setError(err.message);
             })
 
@@ -50,17 +50,24 @@ const Login = () => {
             })
 
     }
-    const handleForgetPassword = () => {
+    const handleForgetPassword = async () => {
+        const email = emailRef.current?.value.trim();
 
-        const email = emailRef.current.value;
-        sendPassResetEmail(email)
-            .then((res) => {
-                setLoading(false);
-                toast.success("Check the email to reset password");
-            })
-            .catch((e) => {
-                toast.error(e.message);
-            });
+        if (!email) {
+            toast.error("first give email");
+            return;
+        }
+
+        try {
+            await sendPassResetEmail(email);
+            toast.success("check the gmail for reset code ");
+        } catch (err) {
+            if (err.message.includes("user-not-found")) {
+                toast.error("There are no Account for this gmail");
+            } else {
+                toast.error("Something is wrong try again later");
+            }
+        }
     };
     return (
         <div className="min-h-screen flex items-center justify-center bg-green-50 px-4">
@@ -83,13 +90,13 @@ const Login = () => {
                         className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-400 focus:outline-none"
                     />
 
-
                     <button
-                        className="hover:underline cursor-pointer text-green-700"
+                        type="button"
                         onClick={handleForgetPassword}
-                        type="button" 
+                        disabled={loading}
+                        className={`text-green-700 hover:underline text-sm ${loading ? 'opacity-60' : ''}`}
                     >
-                        Forget password?
+                        {loading ? 'getting code..' : 'Forget password?'}
                     </button>
 
                     <button type='submit' className="w-full bg-gradient-to-r from-green-600 to-green-900 text-white py-2 rounded-xl font-bold hover:from-green-700 hover:to-green-800 transition-all">
@@ -107,7 +114,7 @@ const Login = () => {
                     <hr className="flex-grow border-gray-300" />
                 </div>
 
-                <button onClick={handleGoogle}  className="w-full flex items-center justify-center gap-2 border py-2 rounded-xl hover:bg-green-100 transition-all">
+                <button onClick={handleGoogle} className="w-full flex items-center justify-center gap-2 border py-2 rounded-xl hover:bg-green-100 transition-all">
                     Continue with Google
                 </button>
 
