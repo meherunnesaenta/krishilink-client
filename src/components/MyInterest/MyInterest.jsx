@@ -1,79 +1,170 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../Context/AuthProvider';
+import { 
+  ClockIcon,
+  CheckCircleIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const MyInterest = () => {
   const { user } = useContext(AuthContext);
   const [interest, setInterest] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user?.email) {
+      setLoading(true);
       fetch(`http://localhost:3000/interest?email=${user.email}`)
         .then(res => res.json())
-        .then(data => setInterest(data));
+        .then(data => {
+          setInterest(data);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
   }, [user?.email]);
 
+  const getStatusConfig = (status) => {
+    switch (status) {
+      case 'accepted':
+        return { bg: 'bg-emerald-100', text: 'text-emerald-800', icon: CheckCircleIcon, label: 'Accepted' };
+      case 'rejected':
+        return { bg: 'bg-red-100', text: 'text-red-800', icon: XCircleIcon, label: 'Rejected' };
+      default:
+        return { bg: 'bg-amber-100', text: 'text-amber-800', icon: ClockIcon, label: 'Pending' };
+    }
+  };
+
+  // Staggered container for rows
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const rowVariant = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  };
+
   return (
-    <div className="min-h-screen bg-green-50 py-12 px-6">
-      <div className="max-w-5xl mx-auto bg-white p-8 rounded-3xl shadow-xl">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 py-12 px-6">
+      <div className="max-w-6xl mx-auto">
 
-        {/* Page Title */}
-        <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-green-700 to-green-900 bg-clip-text text-transparent">
-          My Interests
-        </h1>
-
-        {/* Empty State */}
-        {interest.length === 0 ? (
-          <p className="text-center text-xl text-gray-600 py-10">
-            You have not sent any interests yet.
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-green-700 via-emerald-600 to-teal-700 bg-clip-text text-transparent">
+            My Interests
+          </h1>
+          <p className="mt-4 text-lg text-gray-600">
+            Track all the crop purchase interests you've sent
           </p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full table-auto border-collapse">
-              <thead>
-                <tr className="bg-green-100 text-left text-green-900">
-                  <th className="py-3 px-4">#</th>
-                  <th className="py-3 px-4">Crop Name</th>
-                  <th className="py-3 px-4">Owner</th>
-                  <th className="py-3 px-4">Quantity</th>
-                  <th className="py-3 px-4">Message</th>
-                  <th className="py-3 px-4">Status</th>
-                </tr>
-              </thead>
+        </motion.div>
 
-              <tbody>
-                {interest.map((item, idx) => (
-                  <tr
-                    key={item._id}
-                    className="border-b hover:bg-green-50 transition"
-                  >
-                    <td className="py-3 px-4">{idx + 1}</td>
-                    <td className="py-3 px-4 font-semibold">
-                      {item.product}
-                    </td>
-                    <td className="py-3 px-4">{item.buyer_name}</td>
-                    <td className="py-3 px-4">{item.quantity}</td>
-                    <td className="py-3 px-4">{item.message || "-"}</td>
+        {/* Loading */}
+        <AnimatePresence>
+          {loading ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex justify-center items-center py-20"
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                className="rounded-full h-16 w-16 border-t-4 border-emerald-600 border-solid"
+              />
+            </motion.div>
+          ) : interest.length === 0 ? (
+            /* Empty State */
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white rounded-3xl shadow-xl p-16 text-center"
+            >
+              <div className="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-6">
+                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-semibold text-gray-700 mb-3">No Interests Yet</h3>
+              <p className="text-lg text-gray-500">
+                You haven't sent any interest requests. Start exploring crops!
+              </p>
+            </motion.div>
+          ) : (
+            /* Modern Table */
+            <motion.div
+              variants={container}
+              initial="hidden"
+              animate="visible"
+              className="bg-white rounded-3xl shadow-2xl overflow-hidden"
+            >
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gradient-to-r from-emerald-600 to-green-700 text-white">
+                      <th className="py-5 px-6 text-left text-sm font-semibold uppercase tracking-wider">#</th>
+                      <th className="py-5 px-6 text-left text-sm font-semibold uppercase tracking-wider">Crop Name</th>
+                      <th className="py-5 px-6 text-left text-sm font-semibold uppercase tracking-wider">Seller</th>
+                      <th className="py-5 px-6 text-left text-sm font-semibold uppercase tracking-wider">Quantity</th>
+                      <th className="py-5 px-6 text-left text-sm font-semibold uppercase tracking-wider">Message</th>
+                      <th className="py-5 px-6 text-left text-sm font-semibold uppercase tracking-wider">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {interest.map((item, idx) => {
+                      const statusConfig = getStatusConfig(item.status);
+                      const StatusIcon = statusConfig.icon;
 
-                    {/* Status Badge */}
-                    <td className="py-3 px-4">
-                      <span
-                        className={`
-                          px-3 py-1 rounded-full text-white text-sm font-semibold
-                          ${item.status === "accepted" && "bg-green-600"}
-                          ${item.status === "rejected" && "bg-red-600"}
-                          ${item.status === "pending" && "bg-yellow-500"}
-                        `}
-                      >
-                        {item.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                      return (
+                        <motion.tr
+                          key={item._id}
+                          variants={rowVariant}
+                          whileHover={{ 
+                            backgroundColor: '#f0fdf4',
+                            scale: 1.01,
+                            transition: { duration: 0.2 }
+                          }}
+                          className="transition-all duration-300"
+                        >
+                          <td className="py-5 px-6 text-gray-700 font-medium">{idx + 1}</td>
+                          <td className="py-5 px-6">
+                            <span className="font-bold text-gray-900">{item.product}</span>
+                          </td>
+                          <td className="py-5 px-6 text-gray-700">{item.buyer_name}</td>
+                          <td className="py-5 px-6 text-gray-700">{item.quantity}</td>
+                          <td className="py-5 px-6 text-gray-600 italic max-w-xs">
+                            {item.message || <span className="text-gray-400">—</span>}
+                          </td>
+                          <td className="py-5 px-6">
+                            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${statusConfig.bg} ${statusConfig.text} font-semibold`}>
+                              <StatusIcon className="w-5 h-5" />
+                              {statusConfig.label}
+                            </div>
+                          </td>
+                        </motion.tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
