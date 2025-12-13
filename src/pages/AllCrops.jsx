@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Card from "../components/Card/Card";
 
-const cardPromise = fetch('http://localhost:3000/latest-products')
+const cardPromise = fetch('http://localhost:3000/card')
   .then(res => res.json());
 
 const AllCrops = () => {
