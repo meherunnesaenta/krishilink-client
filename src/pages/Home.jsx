@@ -1,6 +1,7 @@
 // src/pages/Home.jsx
 import {useEffect} from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import Banner1 from '../assets/banner1.jpg'
@@ -19,59 +20,126 @@ const Home = () => {
   return (
     <>
       {/* Hero Slider */}
-      <section className="relative">
-        <Swiper
-          modules={[Autoplay, Pagination]}
-          autoplay={{ delay: 4000 }}
-          pagination={{ clickable: true }}
-          loop={true}
-          className="h-96 md:h-screen"
-        >
-          <SwiperSlide>
-            <div className="hero h-full" style={{ backgroundImage: `url(${Banner1})` }}>
-              <div className="hero-overlay bg-opacity-60"></div>
-              <div className="hero-content text-center text-white">
-                <div className="max-w-2xl">
-                  <h1 className="text-4xl md:text-6xl font-bold">Join the Farmer directly</h1>
-                  <p className="py-6 text-lg md:text-2xl">Sell ​​crops, find buyers – without intermediaries!</p>
-                  <Link to="/all-crops" className="btn btn-accent btn-lg">See all crops</Link>
-                </div>
-              </div>
-            </div>
-          </SwiperSlide>
+      <section className="relative overflow-hidden">
+  <Swiper
+    modules={[Autoplay, Pagination]}
+    autoplay={{ delay: 5000, disableOnInteraction: false }}
+    pagination={{ clickable: true, dynamicBullets: true }}
+    loop={true}
+    className="h-96 md:h-screen"
+  >
+    {/* Slide 1 */}
+    <SwiperSlide>
+      <div 
+        className="hero h-full relative bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${Banner1})` }}
+      >
+        {/* Enhanced Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
 
-          <SwiperSlide>
-            <div className="hero h-full" style={{ backgroundImage: `url(${Banner2})` }}>
-              <div className="hero-overlay bg-opacity-60"></div>
-              <div className="hero-content text-center text-white">
-                <div className="max-w-2xl">
-                  <h1 className="text-4xl md:text-6xl font-bold">Get the right price for your crops.</h1>
-                  <p className="py-6 text-lg md:text-2xl">Talk directly to Sar through Krishilink</p>
-                  <Link to="/register" className="btn btn-accent btn-lg">Join now</Link>
-                </div>
-              </div>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <div className="hero h-full" style={{ backgroundImage: `url(${Banner3})` }}>
-              <div className="hero-overlay bg-opacity-60"></div>
-              <div className="hero-content text-center text-white">
-                <div className="max-w-2xl">
-                  <h1 className="text-4xl md:text-6xl font-bold">Thousands of buyers with one click</h1>
-                  <p className="py-6 text-lg md:text-2xl">Post a picture of your crop, interested buyers will find you.</p>
-                  <Link to="/add-crop" className="btn btn-accent btn-lg">Add crops</Link>
-                </div>
-              </div>
-            </div>
-          </SwiperSlide>
-        </Swiper>
-
-        
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
-          <div className="swiper-pagination"></div>
+        <div className="hero-content text-center text-white z-10 px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="max-w-3xl mx-auto"
+          >
+            <h1 className="text-4xl md:text-7xl font-extrabold leading-tight drop-shadow-2xl">
+              Join the Farmer directly
+            </h1>
+            <p className="py-8 text-lg md:text-3xl font-medium opacity-95">
+              Sell crops, find buyers – without intermediaries!
+            </p>
+            <Link to="/all-crops">
+              <motion.button
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+                className="btn btn-lg bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white border-none shadow-2xl text-xl px-10"
+              >
+                See all crops
+              </motion.button>
+            </Link>
+          </motion.div>
         </div>
-      </section>
+      </div>
+    </SwiperSlide>
+
+    {/* Slide 2 */}
+    <SwiperSlide>
+      <div 
+        className="hero h-full relative bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${Banner2})` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+        <div className="hero-content text-center text-white z-10 px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="max-w-3xl mx-auto"
+          >
+            <h1 className="text-4xl md:text-7xl font-extrabold leading-tight drop-shadow-2xl">
+              Get the right price for your crops.
+            </h1>
+            <p className="py-8 text-lg md:text-3xl font-medium opacity-95">
+              Talk directly to buyers through Krishilink
+            </p>
+            <Link to="/register">
+              <motion.button
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+                className="btn btn-lg bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white border-none shadow-2xl text-xl px-10"
+              >
+                Join now
+              </motion.button>
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+    </SwiperSlide>
+
+    {/* Slide 3 */}
+    <SwiperSlide>
+      <div 
+        className="hero h-full relative bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${Banner3})` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+        <div className="hero-content text-center text-white z-10 px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="max-w-3xl mx-auto"
+          >
+            <h1 className="text-4xl md:text-7xl font-extrabold leading-tight drop-shadow-2xl">
+              Thousands of buyers with one click
+            </h1>
+            <p className="py-8 text-lg md:text-3xl font-medium opacity-95">
+              Post a picture of your crop, interested buyers will find you.
+            </p>
+            <Link to="/add-crop">
+              <motion.button
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+                className="btn btn-lg bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white border-none shadow-2xl text-xl px-10"
+              >
+                Add crops
+              </motion.button>
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+    </SwiperSlide>
+  </Swiper>
+
+  {/* Beautiful Pagination at Bottom */}
+  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+    <div className="swiper-pagination !w-auto"></div>
+  </div>
+</section>
 
       {/* Latest Crops Section */}
       <section className="py-16 bg-lightbg">
@@ -94,56 +162,112 @@ const Home = () => {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center text-green-800 mb-16">কীভাবে কাজ করে কৃষিলিংক?</h2>
-          <div className="grid md:grid-cols-3 gap-10">
-            <div className="text-center">
-              <img src=  "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=1089&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
- alt="" className="mx-auto mb-6 h-32" />
-              <h3 className="text-2xl font-bold text-green-800">১. ফসল যোগ করুন</h3>
-              <p className="mt-4 text-gray-600">আপনার ফসলের ছবি, দাম, পরিমাণ দিয়ে পোস্ট করুন</p>
-            </div>
-            <div className="text-center">
-              <img src= "https://images.unsplash.com/photo-1603833665858-e61d17a86224?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
- alt="" className="mx-auto mb-6 h-32" />
-              <h3 className="text-2xl font-bold text-green-800">২. আগ্রহ দেখান</h3>
-              <p className="mt-4 text-gray-600">পছন্দের ফসলে "আগ্রহী" বাটন চাপুন</p>
-            </div>
-            <div className="text-center">
-              <img src= "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8b3JhbmdlfGVufDB8fDB8fHww" alt="" className="mx-auto mb-6 h-32" />
-              <h3 className="text-2xl font-bold text-green-800">৩. সরাসরি যোগাযোগ</h3>
-              <p className="mt-4 text-gray-600">কৃষকের সাথে চ্যাট করে দাম ঠিক করুন</p>
-            </div>
-          </div>
+<section className="py-20 bg-white">
+  <div className="container mx-auto px-6">
+    <h2 className="text-4xl md:text-5xl font-bold text-center text-green-800 mb-16">
+      How KrishiLink Works
+    </h2>
+    <div className="grid md:grid-cols-3 gap-12">
+      <div className="text-center">
+        <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
+          <span className="text-5xl font-bold text-green-600">1</span>
         </div>
-      </section>
+        <h3 className="text-2xl font-bold text-green-800 mb-4">Post Your Crops</h3>
+        <p className="text-gray-600">Upload photos, set price, quantity, and details of your harvest.</p>
+      </div>
+      <div className="text-center">
+        <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
+          <span className="text-5xl font-bold text-green-600">2</span>
+        </div>
+        <h3 className="text-2xl font-bold text-green-800 mb-4">Show Interest</h3>
+        <p className="text-gray-600">Browse crops and express interest with quantity and message.</p>
+      </div>
+      <div className="text-center">
+        <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
+          <span className="text-5xl font-bold text-green-600">3</span>
+        </div>
+        <h3 className="text-2xl font-bold text-green-800 mb-4">Direct Connection</h3>
+        <p className="text-gray-600">Chat directly with farmers to finalize deals and delivery.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-      {/* Extra 2 Sections (তোর এসাইনমেন্টে লাগবে) */}
-      <section className="py-20 bg-lightbg">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-green-800 mb-8">কেন কৃষিলিংক বেছে নেবেন?</h2>
-          <div className="grid md:grid-cols-4 gap-8 mt-12">
-            <div className="bg-white p-8 rounded-2xl shadow-lg">
-              <h3 className="text-5xl font-bold text-accent">১০০০+</h3>
-              <p className="mt-4 text-xl">সক্রিয় কৃষক</p>
-            </div>
-            <div className="bg-white p-8 rounded-2xl shadow-lg">
-              <h3 className="text-5xl font-bold text-accent">৫০+</h3>
-              <p className="mt-4 text-xl">জেলায় পৌঁছে গেছে</p>
-            </div>
-            <div className="bg-white p-8 rounded-2xl shadow-lg">
-              <h3 className="text-5xl font-bold text-accent">১০০%</h3>
-              <p className="mt-4 text-xl">মধ্যস্থতাকারী মুক্ত</p>
-            </div>
-            <div className="bg-white p-8 rounded-2xl shadow-lg">
-              <h3 className="text-5xl font-bold text-accent">২৪/৭</h3>
-              <p className="mt-4 text-xl">সাপোর্ট</p>
-            </div>
-          </div>
-        </div>
-      </section>
+{/* Why Choose KrishiLink */}
+<section className="py-20 bg-gradient-to-br from-green-50 to-emerald-100">
+  <div className="container mx-auto px-6 text-center">
+    <h2 className="text-4xl md:text-5xl font-bold text-green-800 mb-16">
+      Why Choose KrishiLink?
+    </h2>
+    <div className="grid md:grid-cols-4 gap-10">
+      <div className="bg-white p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all">
+        <h3 className="text-6xl font-bold text-green-600 mb-4">1,000+</h3>
+        <p className="text-xl font-semibold text-gray-700">Active Farmers</p>
+      </div>
+      <div className="bg-white p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all">
+        <h3 className="text-6xl font-bold text-green-600 mb-4">50+</h3>
+        <p className="text-xl font-semibold text-gray-700">Districts Covered</p>
+      </div>
+      <div className="bg-white p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all">
+        <h3 className="text-6xl font-bold text-green-600 mb-4">100%</h3>
+        <p className="text-xl font-semibold text-gray-700">No Middlemen</p>
+      </div>
+      <div className="bg-white p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all">
+        <h3 className="text-6xl font-bold text-green-600 mb-4">24/7</h3>
+        <p className="text-xl font-semibold text-gray-700">Support</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* Extra Section 1: Our Farmers */}
+<section className="py-20 bg-white">
+  <div className="container mx-auto px-6 text-center">
+    <h2 className="text-4xl md:text-5xl font-bold text-green-800 mb-16">
+      Meet Our Farmers
+    </h2>
+    <div className="grid md:grid-cols-3 gap-12">
+      <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-3xl shadow-lg">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500" alt="Farmer" className="w-32 h-32 rounded-full mx-auto mb-6 object-cover border-4 border-green-500" />
+        <h3 className="text-2xl font-bold text-green-800 mb-2">Rahim Hossain</h3>
+        <p className="text-gray-600">Tomato & Vegetable Farmer, Jessore</p>
+      </div>
+      <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-3xl shadow-lg">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500" alt="Farmer" className="w-32 h-32 rounded-full mx-auto mb-6 object-cover border-4 border-green-500" />
+        <h3 className="text-2xl font-bold text-green-800 mb-2">Karim Ahmed</h3>
+        <p className="text-gray-600">Rice Farmer, Bogura</p>
+      </div>
+      <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-3xl shadow-lg">
+        <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=500" alt="Farmer" className="w-32 h-32 rounded-full mx-auto mb-6 object-cover border-4 border-green-500" />
+        <h3 className="text-2xl font-bold text-green-800 mb-2">Selim Khan</h3>
+        <p className="text-gray-600">Potato Farmer, Rangpur</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* Extra Section 2: Success Stories */}
+<section className="py-20 bg-gradient-to-br from-emerald-50 to-green-50">
+  <div className="container mx-auto px-6 text-center">
+    <h2 className="text-4xl md:text-5xl font-bold text-green-800 mb-16">
+      Success Stories
+    </h2>
+    <div className="grid md:grid-cols-2 gap-12">
+      <div className="bg-white p-10 rounded-3xl shadow-xl">
+        <p className="text-lg italic text-gray-700 mb-6">
+          "Thanks to KrishiLink, I sold 2 tons of rice directly to buyers and got 20% more profit without any middlemen!"
+        </p>
+        <p className="font-bold text-green-700">— Rahim Hossain, Bogura</p>
+      </div>
+      <div className="bg-white p-10 rounded-3xl shadow-xl">
+        <p className="text-lg italic text-gray-700 mb-6">
+          "I found fresh organic tomatoes at the best price. The direct connection saved time and money!"
+        </p>
+        <p className="font-bold text-green-700">— Karim Ahmed, Dhaka</p>
+      </div>
+    </div>
+  </div>
+</section>
     </>
   );
 };
