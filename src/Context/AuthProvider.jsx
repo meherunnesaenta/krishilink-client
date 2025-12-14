@@ -39,6 +39,7 @@ const AuthProvider = ({ children }) => {
         });
         return updateProfile(auth.currentUser, { displayName, photoURL });
     }
+    
 
     const sendPassResetEmail = async (email) => {
        if (!email) {

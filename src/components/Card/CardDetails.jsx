@@ -68,7 +68,6 @@ const CropDetails = () => {
       <p>Total Price: <strong>৳${totalPrice.toLocaleString()}</strong></p>
     `,
             icon: "success",
-            timer: 3000,
             timerProgressBar: true
           });
 

@@ -9,8 +9,9 @@ import PrivateRoute from "../Context/PrivateRoute";
 import Register from "../components/Register/Register";
 import CardDetails from "../components/Card/CardDetails";
 import MyInterest from "../components/MyInterest/MyInterest";
-import { AddCrops } from "../pages/AddCrops";
+
 import MyPost from "../pages/MyPost";
+import AddCrops from "../pages/AddCrops";
 
 export const router = createBrowserRouter([
   {
