@@ -82,7 +82,11 @@ const CropDetails = () => {
 
 
   useEffect(() => {
-    fetch(`http://localhost:3000/card/interest/${crop._id}`)
+    fetch(`http://localhost:3000/card/interest/${crop._id}`,{
+      headers:{
+        authorization: `Bearer ${user?.accessToken}`
+      }
+    })
       .then(res => res.json())
       .then(data => {
         console.log('interest for this crop', data)

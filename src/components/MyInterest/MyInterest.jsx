@@ -15,9 +15,14 @@ const MyInterest = () => {
   useEffect(() => {
     if (user?.email) {
       setLoading(true);
-      fetch(`http://localhost:3000/interest?email=${user.email}`)
+      fetch(`http://localhost:3000/interest?email=${user.email}`,{
+        headers:{
+          authorization: `Bearer ${user.accessToken}`
+        }
+      })
         .then(res => res.json())
         .then(data => {
+          console.log(data);
           setInterest(data);
           setLoading(false);
         })

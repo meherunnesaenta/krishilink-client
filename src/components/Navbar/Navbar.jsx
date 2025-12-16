@@ -11,11 +11,6 @@ const navbarVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
 };
 
-const linkVariants = {
-  hover: { scale: 1.08, color: "#166534" },
-  tap: { scale: 0.95 },
-};
-
 const dropdownVariants = {
   hidden: { opacity: 0, y: -10 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
@@ -118,9 +113,9 @@ export default function Navbar() {
                 </Link>
             </div>
 
-            {/* Desktop Menu - Fixed nested <li> error */}
+            {/* Desktop Menu */}
             <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-4 gap-4">
+                <ul className="menu menu-horizontal px-4 gap-6">
                     {React.Children.map(currentLinks.props.children, (child, index) => (
                         <motion.li
                             key={index}
@@ -131,13 +126,10 @@ export default function Navbar() {
                             whileTap={{ scale: 0.95 }}
                             className="rounded-lg"
                         >
-                            <motion.div
-                                variants={linkVariants}
-                                whileHover="hover"
-                                whileTap="tap"
-                            >
+                            {/* Tailwind-এর transition দিয়ে color change smooth করা হয়েছে */}
+                            <div className="transition-colors duration-300">
                                 {child.props.children}
-                            </motion.div>
+                            </div>
                         </motion.li>
                     ))}
                 </ul>
@@ -163,7 +155,7 @@ export default function Navbar() {
                             />
                             <p className="hidden md:block text-lg">
                                 Hi, <span className="font-bold bg-gradient-to-r from-green-600 to-green-900 bg-clip-text text-transparent">
-                                    {user.displayName || user.email.split('@')[0]}
+                                    {user.displayName.split(' ')[0]}
                                 </span>
                             </p>
                         </motion.div>
@@ -175,7 +167,7 @@ export default function Navbar() {
                 {user ? (
                     <motion.button
                         onClick={handleLogout}
-                        className="btn bg-green-600 text-white border-none hover:bg-green-700 shadow-md"
+                        className="btn bg-green-600 text-white border-none hover:bg-green-700 shadow-md transition-all duration-300"
                         variants={buttonVariants}
                         whileHover="hover"
                         whileTap="tap"
@@ -185,7 +177,7 @@ export default function Navbar() {
                 ) : (
                     <MyNavLink to="/login">
                         <motion.div
-                            className="btn bg-green-600 text-white border-none hover:bg-green-700 shadow-md"
+                            className="btn bg-green-600 text-white border-none hover:bg-green-700 shadow-md transition-all duration-300"
                             variants={buttonVariants}
                             whileHover="hover"
                             whileTap="tap"
