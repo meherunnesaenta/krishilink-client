@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, NavLink } from 'react-router-dom';
-import logo from "../../assets/logo.png";
 import MyNavLink from '../MyAddition/MyNavLink';
 import { AuthContext } from '../../Context/AuthProvider';
 
@@ -97,13 +96,6 @@ export default function Navbar() {
                 </div>
 
                 <Link to="/" className="flex items-center gap-3 ml-2">
-                    <motion.img
-                        src={logo}
-                        alt="logo"
-                        className="h-12 w-12 rounded-lg shadow-md"
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        transition={{ type: "spring" }}
-                    />
                     <motion.span
                         className="text-2xl font-extrabold bg-gradient-to-r from-green-700 to-green-900 bg-clip-text text-transparent"
                         whileHover={{ scale: 1.05 }}
