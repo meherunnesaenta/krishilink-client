@@ -75,7 +75,7 @@ const alreadyInterested = Array.isArray(interests)
       status: "pending",
     };
 
-    fetch("http://localhost:3000/interest", {
+    fetch("https://krishilink-xi.vercel.app/interest", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(newInterest),
@@ -104,7 +104,7 @@ const alreadyInterested = Array.isArray(interests)
   useEffect(() => {
     if (!user || !crop?._id) return;
 
-    fetch(`http://localhost:3000/card/interest/${crop._id}`,{
+    fetch(`https://krishilink-xi.vercel.app/card/interest/${crop._id}`,{
       headers: {
         Authorization: `Bearer ${user && user.accessToken}`
       }
@@ -149,7 +149,7 @@ const handleStatusChange = async (interestId, newStatus) => {
   try {
     const idToken = await user.getIdToken();
 
-    response = await fetch(`http://localhost:3000/interest/${interestId}/status`, {
+    response = await fetch(`https://krishilink-xi.vercel.app/interest/${interestId}/status`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

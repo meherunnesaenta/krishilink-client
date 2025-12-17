@@ -17,7 +17,7 @@ export default function MyPost() {
       return;
     }
 
-    fetch(`http://localhost:3000/myposts?email=${user.email}`, {
+    fetch(`https://krishilink-xi.vercel.app/myposts?email=${user.email}`, {
       headers: {
         authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`
       }
@@ -50,7 +50,7 @@ export default function MyPost() {
       return;
     }
 
-    fetch(`http://localhost:3000/card/${id}`, {
+    fetch(`https://krishilink-xi.vercel.app/card/${id}`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`
@@ -82,7 +82,7 @@ export default function MyPost() {
       return;
     }
 
-    const res = await fetch(`http://localhost:3000/card/${id}`, {
+    const res = await fetch(`https://krishilink-xi.vercel.app/card/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

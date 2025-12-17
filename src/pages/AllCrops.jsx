@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Card from "../components/Card/Card";
 
-const cardPromise = fetch('http://localhost:3000/card')
+const cardPromise = fetch('https://krishilink-xi.vercel.app/card')
   .then(res => res.json());
 
 const AllCrops = () => {

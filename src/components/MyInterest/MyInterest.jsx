@@ -22,7 +22,7 @@ const MyInterest = () => {
       setLoading(true);
       try {
         const token = await user.getIdToken();
-        const res = await fetch('http://localhost:3000/interest', {
+        const res = await fetch('https://krishilink-xi.vercel.app/interest', {
           headers: {
             Authorization: `Bearer ${token}`
           }

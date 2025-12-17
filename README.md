@@ -1,16 +1,21 @@
-# React + Vite
+Krishilink 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application that connects farmers directly with buyers. Farmers can list their crops, and buyers can show interest in purchasing them. The platform includes features like crop details, interest requests, accept/reject functionality, and a personal "My Interests" page.
+Live Demo: https://endearing-bubblegum-6944b3.netlify.app/
+Features
 
-Currently, two official plugins are available:
+Crop Listing & Details – Farmers post crops with images, price, quantity, location, and description.
+Show Interest – Buyers can send purchase interest requests with quantity and optional message.
+Accept / Reject Interests – Crop owners can accept or reject buyer requests.
+My Interests Page – Buyers can track all their sent interests and see the current status (Pending, Accepted, Rejected).
+Authentication – Powered by Firebase Authentication (email/password or Google sign-in).
+Responsive Design – Built with Tailwind CSS and DaisyUI for a modern, mobile-friendly UI.
+Animations – Smooth transitions and effects using Framer Motion.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Tech Stack
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Frontend: React.js, React Router, Tailwind CSS, DaisyUI, Framer Motion, Lucide & Heroicons
+Backend: Node.js, Express.js
+Database: MongoDB (Atlas)
+Authentication: Firebase Admin SDK (server-side token verification)
+Deployment: Frontend on Netlify, Backend on your own server (e.g., Render, Vercel, Railway, etc.)

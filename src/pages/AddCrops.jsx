@@ -53,7 +53,7 @@ const AddCrop = () => {
         },
       };
 
-      const response = await fetch('http://localhost:3000/card', { 
+      const response = await fetch('https://krishilink-xi.vercel.app/card', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

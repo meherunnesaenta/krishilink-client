@@ -40,7 +40,7 @@ export const router = createBrowserRouter([
       },
       {
         path:'/card/:id',
-        loader:({params})=>fetch(`http://localhost:3000/card/${params.id}`),
+        loader:({params})=>fetch(`https://krishilink-xi.vercel.app/card/${params.id}`),
         element:<PrivateRoute><CardDetails></CardDetails></PrivateRoute>
       },
       {

@@ -13,7 +13,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import Card from "../components/Card/Card";
 
-const cardPromise = fetch('http://localhost:3000/latest-products').then(res=>res.json());
+const cardPromise = fetch('https://krishilink-xi.vercel.app/latest-products').then(res=>res.json());
 
 
 const Home = () => {
