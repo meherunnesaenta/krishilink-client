@@ -15,7 +15,7 @@ const AddCrop = () => {
     quantity: '',
     description: '',
     location: '',
-    image: '', // URL
+    image: '', 
   });
 
   const [submitting, setSubmitting] = useState(false);
@@ -35,6 +35,9 @@ const AddCrop = () => {
     setSubmitting(true);
 
     try {
+      // Firebase ID token
+      const token = await user.getIdToken();
+
       const payload = {
         name: formData.name,
         type: formData.type,
@@ -54,6 +57,7 @@ const AddCrop = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify(payload),
       });
@@ -64,11 +68,9 @@ const AddCrop = () => {
       }
 
       toast.success('Crop post created successfully!');
-      
-      // Redirect to My Posts page after 1.5 seconds
-      setTimeout(() => {
-        navigate('/my-posts'); 
-      }, 1500);
+
+      // Redirect
+      setTimeout(() => navigate('/my-posts'), 1500);
 
     } catch (err) {
       toast.error(err.message || 'Something went wrong');
@@ -88,9 +90,7 @@ const AddCrop = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-lime-100 py-10 px-4">
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-10 text-green-800">
-          Add New Crop Post
-        </h2>
+        <h2 className="text-4xl font-bold text-center mb-10 text-green-800">Add New Crop Post</h2>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
           {/* Name */}
@@ -209,13 +209,6 @@ const AddCrop = () => {
               className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="https://example.com/tomato.jpg"
             />
-            <p className="text-sm text-gray-600 mt-2">
-              Tip: Upload your photo to{' '}
-              <a href="https://imgbb.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                imgbb.com
-              </a>{' '}
-              (free) and paste the direct link here.
-            </p>
           </div>
 
           {/* Submit */}

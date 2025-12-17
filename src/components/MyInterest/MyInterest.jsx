@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../Context/AuthProvider';
-import { 
+import {
   ClockIcon,
   CheckCircleIcon,
   XCircleIcon
 } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const MyInterest = () => {
   const { user } = useContext(AuthContext);
@@ -13,23 +14,35 @@ const MyInterest = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user?.email) {
+    const fetchInterest = async () => {
+      if (!user?.email) {
+        setLoading(false);
+        return;
+      }
       setLoading(true);
-      fetch(`http://localhost:3000/interest?email=${user.email}`,{
-        headers:{
-          authorization: `Bearer ${user.accessToken}`
+      try {
+        const token = await user.getIdToken();
+        const res = await fetch(`http://localhost:3000/interest?email=${user.email}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error('Failed to fetch interests');
         }
-      })
-        .then(res => res.json())
-        .then(data => {
-          console.log(data);
-          setInterest(data);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+
+        const data = await res.json();
+        setInterest(data);
+      } catch (err) {
+        console.error(err);
+        setInterest([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInterest();
   }, [user?.email]);
 
   const getStatusConfig = (status) => {
@@ -43,26 +56,20 @@ const MyInterest = () => {
     }
   };
 
-  // Staggered container for rows
   const container = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
   };
 
   const rowVariant = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
+  console.log(interest);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 py-12 px-6">
       <div className="max-w-6xl mx-auto">
-
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -77,7 +84,6 @@ const MyInterest = () => {
           </p>
         </motion.div>
 
-        {/* Loading */}
         <AnimatePresence>
           {loading ? (
             <motion.div
@@ -93,7 +99,6 @@ const MyInterest = () => {
               />
             </motion.div>
           ) : interest.length === 0 ? (
-            /* Empty State */
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -110,7 +115,6 @@ const MyInterest = () => {
               </p>
             </motion.div>
           ) : (
-            /* Modern Table */
             <motion.div
               variants={container}
               initial="hidden"
@@ -138,22 +142,19 @@ const MyInterest = () => {
                         <motion.tr
                           key={item._id}
                           variants={rowVariant}
-                          whileHover={{ 
-                            backgroundColor: '#f0fdf4',
-                            scale: 1.01,
-                            transition: { duration: 0.2 }
-                          }}
+                          whileHover={{ backgroundColor: '#f0fdf4', scale: 1.01, transition: { duration: 0.2 } }}
                           className="transition-all duration-300"
                         >
                           <td className="py-5 px-6 text-gray-700 font-medium">{idx + 1}</td>
-                          <td className="py-5 px-6">
-                            <span className="font-bold text-gray-900">{item.product}</span>
-                          </td>
-                          <td className="py-5 px-6 text-gray-700">{item.buyer_name}</td>
-                          <td className="py-5 px-6 text-gray-700">{item.quantity}</td>
-                          <td className="py-5 px-6 text-gray-600 italic max-w-xs">
-                            {item.message || <span className="text-gray-400">—</span>}
-                          </td>
+                          <td className="py-5 px-6"><span className="font-bold text-gray-900">  <Link
+                            to={`/card/${item.cropId}`}
+                            className="font-bold text-emerald-700 hover:underline hover:text-emerald-900 transition"
+                          >
+                            {item.product}
+                          </Link></span></td>
+                          <td className="py-5 px-6 text-gray-700">{item.ownerName}</td>
+                          <td className="py-5 px-6 text-gray-700">{item.quantity} {item.unit || ''}</td>
+                          <td className="py-5 px-6 text-gray-600 italic max-w-xs">{item.message || <span className="text-gray-400">—</span>}</td>
                           <td className="py-5 px-6">
                             <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${statusConfig.bg} ${statusConfig.text} font-semibold`}>
                               <StatusIcon className="w-5 h-5" />

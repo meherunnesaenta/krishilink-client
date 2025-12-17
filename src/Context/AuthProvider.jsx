@@ -21,6 +21,12 @@ const AuthProvider = ({ children }) => {
 
     }
 
+    const getToken = async () => {
+        if (!auth.currentUser) return null;
+        return await auth.currentUser.getIdToken(/* forceRefresh */ true);
+    };
+
+
     const googleSignIn = () => {
         setLoading(true);
         return signInWithPopup(auth, googleProvider);
@@ -39,19 +45,19 @@ const AuthProvider = ({ children }) => {
         });
         return updateProfile(auth.currentUser, { displayName, photoURL });
     }
-    
+
 
     const sendPassResetEmail = async (email) => {
-       if (!email) {
-      throw new Error("give email");
-    }
-    setLoading(true);
-    try {
-      await sendPasswordResetEmail(auth, email);
-      return Promise.resolve(); 
-    } finally {
-      setLoading(false); 
-    }
+        if (!email) {
+            throw new Error("give email");
+        }
+        setLoading(true);
+        try {
+            await sendPasswordResetEmail(auth, email);
+            return Promise.resolve();
+        } finally {
+            setLoading(false);
+        }
     };
 
 
@@ -59,7 +65,6 @@ const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setLoading(false);
-            console.log('auth state changed', currentUser);
 
         })
         return () => {
@@ -76,7 +81,8 @@ const AuthProvider = ({ children }) => {
         logout,
         googleSignIn,
         update,
-        sendPassResetEmail
+        sendPassResetEmail,
+        getToken
 
     }
     return (
