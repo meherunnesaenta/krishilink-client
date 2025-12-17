@@ -22,7 +22,7 @@ const MyInterest = () => {
       setLoading(true);
       try {
         const token = await user.getIdToken();
-        const res = await fetch(`http://localhost:3000/interest?email=${user.email}`, {
+        const res = await fetch('http://localhost:3000/interest', {
           headers: {
             Authorization: `Bearer ${token}`
           }
